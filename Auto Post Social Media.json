@@ -1,0 +1,185 @@
+{
+  "name": "Auto Post Social Media",
+  "nodes": [
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1.1,
+      "position": [
+        320,
+        128
+      ],
+      "id": "35b292fd-8b76-4833-87c9-9eae1bd26681",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "hiPYVWbTEsaj6WsS",
+          "name": "Google Gemini(PaLM) Api account 1206"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "formTitle": "Generate Your Idea",
+        "formDescription": "Reference site about Lorem Ipsum, giving information on its origins, as well as a random Lipsum generator.",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Generate Your Prompt",
+              "fieldType": "textarea",
+              "placeholder": "Share Your Content Idea"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.5,
+      "position": [
+        16,
+        -96
+      ],
+      "id": "fd14b8af-fade-4101-a817-9b3f09a94ba2",
+      "name": "Content Idea Generator",
+      "webhookId": "78638b7f-b3f7-4ac5-ac91-25df2230e2cf"
+    },
+    {
+      "parameters": {
+        "text": "=Topic:  {{ $json['Generate Your Prompt'] }}\n\nBased on this topic General Social Media Platform based captions.dont used this(*)this story symbol in the output. it should give bengli language also maximum 200-300 word",
+        "attributes": {
+          "attributes": [
+            {
+              "name": "Facebook Caption",
+              "description": "Caption for facebook with proper Hastag",
+              "required": true
+            },
+            {
+              "name": "Instagram Caption",
+              "description": "Caption for Instagram with proper Hastag",
+              "required": true
+            },
+            {
+              "name": "linkedin Caption",
+              "description": "Caption for linkedin with proper Hastag",
+              "required": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.informationExtractor",
+      "typeVersion": 1.2,
+      "position": [
+        240,
+        -96
+      ],
+      "id": "dba5c381-8ade-4ecc-89a0-afe124ec5da1",
+      "name": "Information Extractor"
+    },
+    {
+      "parameters": {
+        "operation": "uploadText",
+        "user": "AiAutomation",
+        "platform": [
+          "facebook"
+        ],
+        "title": "={{ $json.output['Facebook Caption'] }}",
+        "facebookPageId": "106436768761110"
+      },
+      "type": "n8n-nodes-upload-post.uploadPost",
+      "typeVersion": 1,
+      "position": [
+        592,
+        -192
+      ],
+      "id": "86ed6f26-698f-45a7-84fb-3211d2b000a3",
+      "name": "Facebook Page Post",
+      "credentials": {
+        "uploadPostApi": {
+          "id": "aFAq5LWoBL6UUpIi",
+          "name": "Upload Post account 279"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "uploadText",
+        "user": "AiAutomation",
+        "platform": [
+          "linkedin"
+        ],
+        "title": "={{ $json.output['linkedin Caption'] }}",
+        "targetLinkedinPageId": "me"
+      },
+      "type": "n8n-nodes-upload-post.uploadPost",
+      "typeVersion": 1,
+      "position": [
+        592,
+        0
+      ],
+      "id": "2df19c16-4934-4876-8639-4fafe73e909e",
+      "name": "LinkedIn Post",
+      "credentials": {
+        "uploadPostApi": {
+          "id": "aFAq5LWoBL6UUpIi",
+          "name": "Upload Post account 279"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Information Extractor",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Content Idea Generator": {
+      "main": [
+        [
+          {
+            "node": "Information Extractor",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Information Extractor": {
+      "main": [
+        [
+          {
+            "node": "Facebook Page Post",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "LinkedIn Post",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "5cb8a541-fe08-4c05-a4b7-2ec8c2874525",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "5f00bba974abf03cb5183d4d65f8a9645a781b04770df6a7d08284fca87d50b3"
+  },
+  "id": "tb8I2CubwxSchEy0",
+  "tags": []
+}
